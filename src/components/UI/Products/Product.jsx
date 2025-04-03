@@ -7,6 +7,7 @@ import { Navbar } from "../../utils/Navbar";
 export const Product = () => {
   const navigate = useNavigate();
   const { addItemToCart, products, items, fetchProducts } = useContext(ShoppingContext);
+  console.log("products", products)
 
   useEffect(() => {
     fetchProducts();

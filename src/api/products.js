@@ -3,7 +3,7 @@ import axios from "axios";
 const getToken = () => localStorage.getItem("token");
 
 const productsAPI = axios.create({
-  baseURL: "http://localhost:9090/",
+  baseURL: "https://go-stripe-ecommerce-production.up.railway.app",
 });
 
 productsAPI.interceptors.request.use(
