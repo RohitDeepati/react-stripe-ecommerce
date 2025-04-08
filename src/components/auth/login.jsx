@@ -5,6 +5,7 @@ import { ShoppingContext } from "../store/EcommerceContext"
 
 const isEmpty = (value) => value.trim() === ""
 const isMoreThanSix = (value) => value.trim().length >= 6
+const isValidEmail = (value) => /^\S+@\S+\.\S+$/.test(value.trim())
 
 export const LoginUser = () => {
   const navigate = useNavigate()
@@ -24,7 +25,7 @@ export const LoginUser = () => {
   const { setEmail } = useContext(ShoppingContext);
 
   const inputFormIsValid = () => {
-    const enteredEmailIsValid = !isEmpty(enteredEmail)
+    const enteredEmailIsValid = !isEmpty(enteredEmail) && isValidEmail(enteredEmail)
     const enteredPasswordIsValid = isMoreThanSix(enteredPassword)
 
     setFormValidity({
@@ -41,7 +42,7 @@ export const LoginUser = () => {
     setEnteredEmail(value)
     setFormValidity((prev) => ({
       ...prev,
-      email: !isEmpty(value)
+      email: !isEmpty(value) && isValidEmail(value)
     }))
   }
 

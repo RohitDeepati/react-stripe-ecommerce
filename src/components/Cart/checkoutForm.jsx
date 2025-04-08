@@ -33,9 +33,7 @@ export const CheckOutForm = () => {
       zipcode: enteredZipcodeIsValid
     })
 
-    const formIsValid = enteredNameIsValid && enteredLandmarkIsValid && enteredZipcodeIsValid
-
-    return formIsValid;
+    return enteredNameIsValid && enteredLandmarkIsValid && enteredZipcodeIsValid
   }
 
   const handleSubmit = (e) => {
@@ -46,6 +44,38 @@ export const CheckOutForm = () => {
     }
     postCheckOutSession()
   }
+
+  const handleNameChange = (e) => {
+    const value = e.target.value
+    setEnteredName(value)
+    setFormValidity((prev) => ({
+      ...prev,
+      name: !isEmpty(value)
+    }))
+  }
+
+  const handleLandmarkChange = (e) => {
+    const value = e.target.value
+    setEnteredLandmark(value)
+    setFormValidity((prev) => ({
+      ...prev,
+      landmark: !isEmpty(value)
+    }))
+  }
+
+  const handleZipcodeChange = (e) => {
+    const value = e.target.value;
+
+    // Allow only numbers using regex
+    if (/^\d{0,6}$/.test(value)) {
+      setEnteredZipCode(value);
+      setFormValidity((prev) => ({
+        ...prev,
+        zipcode: isSixChars(value)
+      }));
+    }
+  }
+
 
   const dataTosumbit = items?.map((item) => ({
     productName: item.productName,
@@ -62,11 +92,8 @@ export const CheckOutForm = () => {
   }
 
   useEffect(() => {
-
     const urlParams = new URLSearchParams(window.location.search)
-
     const sessionId = urlParams.get("session_id")
-
     if (sessionId) {
       handlePaymentSuccess()
     }
@@ -101,8 +128,8 @@ export const CheckOutForm = () => {
           value={enteredName}
           name="name"
           ref={nameInputRef}
-          onChange={(e) => setEnteredName(e.target.value)}
-          className="bg-white outline-none px-2 py-1 text-sm rounded border border-gray-300"
+          onChange={handleNameChange}
+          className={`bg-white outline-none px-2 py-1 text-sm rounded border border-gray-300 ${!formValidity.name ? "border-red-500" : ""}`}
         />
         {!formValidity.name && <div className="text-red-500 text-xs mt-1">Please enter a valid name</div>}
       </div>
@@ -112,8 +139,8 @@ export const CheckOutForm = () => {
           value={enteredLandmark}
           name="landmark"
           ref={landmarkInputRef}
-          onChange={(e) => setEnteredLandmark(e.target.value)}
-          className="bg-white outline-none px-2 py-1 text-sm rounded border border-gray-300"
+          onChange={handleLandmarkChange}
+          className={`bg-white outline-none px-2 py-1 text-sm rounded border border-gray-300 ${!formValidity.landmark ? "border-red-500" : ""}`}
         />
         {!formValidity.landmark && <div className="text-red-500 text-xs mt-1">Please enter a valid landmark</div>}
       </div>
@@ -121,10 +148,12 @@ export const CheckOutForm = () => {
         <label className="text-sm font-medium">ZipCode:</label>
         <input
           name="zipcode"
+          type="number"
+          maxLength={6}
           value={enteredZipcode}
           ref={zipcodeInputRef}
-          onChange={(e) => setEnteredZipCode(e.target.value)}
-          className="bg-white outline-none px-2 py-1 text-sm rounded border border-gray-300"
+          onChange={handleZipcodeChange}
+          className={`bg-white outline-none px-2 py-1 text-sm rounded border border-gray-300 ${!formValidity.zipcode ? "border-red-500" : ""}`}
         />
         {!formValidity.zipcode && <div className="text-red-500 text-xs">Please enter a valid six chars zipcode</div>}
       </div>

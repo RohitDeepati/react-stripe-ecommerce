@@ -50,6 +50,43 @@ export const SignupUser = () => {
   }
 
 
+  const handleNameChange = (e) => {
+    const value = e.target.value
+    setEnteredName(value)
+    setFormValidity((prev) => ({
+      ...prev,
+      name: !isEmpty(value)
+    }))
+  }
+
+  const handleEmailChange = (e) => {
+    const value = e.target.value
+    setEnteredEmail(value)
+    setFormValidity((prev) => ({
+      ...prev,
+      email: !isEmpty(value) && isValidEmail(value)
+    }))
+  }
+
+  const handlePasswordChange = (e) => {
+    const value = e.target.value;
+    setEnteredPassword(value)
+    setFormValidity((prev) => ({
+      ...prev,
+      password: isMoreThanSix(value)
+    }))
+  }
+
+  const handleRoleChange = (e) => {
+    const value = e.target.value
+    setEnteredRole(value)
+    setFormValidity((prev) => ({
+      ...prev,
+      role: !isEmpty(value)
+    }))
+  }
+
+
   const submitHandler = async (e) => {
     e.preventDefault()
     if (!inputFormIsValid()) {
@@ -94,7 +131,7 @@ export const SignupUser = () => {
             name="name"
             value={enteredName}
             ref={nameInputRef}
-            onChange={(e) => setEnteredName(e.target.value)}
+            onChange={handleNameChange}
             type="text"
             placeholder="Enter your Name"
             className={`border border-gray-300 text-sm focus:outline-none  p-2 rounded ${!formValidity.name ? "border border-red-500" : ""}`}
@@ -109,7 +146,7 @@ export const SignupUser = () => {
             name="email"
             value={enteredEmail}
             ref={emailInputRef}
-            onChange={(e) => setEnteredEmail(e.target.value)}
+            onChange={handleEmailChange}
             type="text"
             placeholder="Enter Your email"
             className={`border border-gray-300 text-sm focus:outline-none  p-2 rounded ${!formValidity.email ? "border border-red-500" : ""}`}
@@ -123,13 +160,12 @@ export const SignupUser = () => {
             name="password"
             value={enteredPassword}
             ref={passwordInputRef}
-            onChange={(e) => setEnteredPassword(e.target.value)}
+            onChange={handlePasswordChange}
             type="password"
             placeholder="Enter Your Password"
             className={`border border-gray-300 text-sm focus:outline-none p-2 rounded ${!formValidity.password ? "border border-red-500" : ""}`}
           />
           {!formValidity.password && <p className="text-red-500 text-sm">Please enter a more than six chars</p>}
-
         </div>
 
         <div className="flex flex-col gap-2 p-1">
@@ -137,7 +173,7 @@ export const SignupUser = () => {
           <select name="role"
             value={enteredRole}
             ref={roleInputRef}
-            onChange={(e) => setEnteredRole(e.target.value)}
+            onChange={handleRoleChange}
             className={`border border-gray-300 text-sm focus:outline-none p-2 rounded ${!formValidity.role ? "border border-red-500" : ""}`} >
             <option value="">Select Role</option>
             <option>Buyer</option>
