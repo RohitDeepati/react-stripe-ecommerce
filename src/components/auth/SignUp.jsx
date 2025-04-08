@@ -1,37 +1,68 @@
-import { useContext, useState } from "react"
+import { useContext, useRef, useState } from "react"
 import { Link, useNavigate } from "react-router"
 import { addNewUser } from "../../api/users"
 import { ShoppingContext } from "../store/EcommerceContext"
+
+
+const isEmpty = (value) => value.trim() === ""
+const isMoreThanSix = (value) => value.trim().length >= 6
+const isValidEmail = (value) => /^\S+@\S+\.\S+$/.test(value.trim())
 
 export const SignupUser = () => {
   const navigate = useNavigate()
   const { setEmail } = useContext(ShoppingContext)
 
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    password: "",
-    role: ""
+  const [error, setError] = useState("")
+
+  const [formValidity, setFormValidity] = useState({
+    name: true,
+    email: true,
+    password: true,
+    role: true
   })
 
-  const [errors, setErrors] = useState({
-    server: ""
-  })
+  const [enteredName, setEnteredName] = useState("")
+  const [enteredEmail, setEnteredEmail] = useState("")
+  const [enteredPassword, setEnteredPassword] = useState("")
+  const [enteredRole, setEnteredRole] = useState("")
+
+  const nameInputRef = useRef()
+  const emailInputRef = useRef()
+  const passwordInputRef = useRef()
+  const roleInputRef = useRef()
 
 
-  const handleChange = (e) => {
-    const { name, value } = e.target
-    setFormData((prev) => ({ ...prev, [name]: value }))
 
+  const inputFormIsValid = () => {
+    const enteredNameIsValid = !isEmpty(enteredName)
+    const enteredEmailIsValid = !isEmpty(enteredEmail) && isValidEmail(enteredEmail)
+    const enteredPasswordIsValid = isMoreThanSix(enteredPassword)
+    const enteredRoleIsValid = !isEmpty(enteredRole)
+
+    setFormValidity({
+      name: enteredNameIsValid,
+      email: enteredEmailIsValid,
+      password: enteredPasswordIsValid,
+      role: enteredRoleIsValid
+    })
+
+    return enteredNameIsValid && enteredEmailIsValid && enteredPasswordIsValid && enteredRoleIsValid
   }
+
 
   const submitHandler = async (e) => {
     e.preventDefault()
+    if (!inputFormIsValid()) {
+      return
+    }
 
-    setErrors((prevErrors) => ({
-      ...prevErrors,
-      server: ""
-    }))
+    const formData = {
+      name: enteredName,
+      email: enteredEmail,
+      password: enteredPassword,
+      role: enteredRole
+    }
+
 
     try {
       const response = await addNewUser(formData)
@@ -46,10 +77,7 @@ export const SignupUser = () => {
       console.error("Signup error", error)
 
       if (error.response && error.response.data.error) {
-        setErrors((prevErrors) => ({
-          ...prevErrors,
-          server: error.response.data.error
-        }))
+        setError(error.response.data.error)
       }
     }
 
@@ -59,33 +87,63 @@ export const SignupUser = () => {
     <div className="max-w-md mx-auto mt-10 p-4 bg-[whitesmoke] rounded-lg shadow-lg border border-gray-300">
       <header className="font-semibold text-center text-xl p-2">New Account?</header>
       <form onSubmit={submitHandler} className="flex flex-col">
-        {errors.server && <div className="text-center text-red-500 text-sm">{errors.server}</div>}
+        {error && <div className="text-center text-red-500 text-sm">{error}</div>}
         <div className="flex flex-col gap-2 p-1">
           <label>Name</label>
-          <input name="name" value={formData.name} onChange={handleChange} type="text" placeholder="Enter your Name" className={`border border-gray-300 text-sm focus:outline-none  p-2 rounded ${errors.server === "All fields are required" ? "border border-red-500" : ""}`} />
-          {errors.name && <p className="text-red-500 text-sm">{errors.name}</p>}
+          <input
+            name="name"
+            value={enteredName}
+            ref={nameInputRef}
+            onChange={(e) => setEnteredName(e.target.value)}
+            type="text"
+            placeholder="Enter your Name"
+            className={`border border-gray-300 text-sm focus:outline-none  p-2 rounded ${!formValidity.name ? "border border-red-500" : ""}`}
+          />
+          {!formValidity.name && <p className="text-red-500 text-sm">Please enter a valid name</p>}
+
         </div>
 
         <div className="flex flex-col gap-2 p-1">
           <label>Email</label>
-          <input name="email" value={formData.email} onChange={handleChange} type="text" placeholder="Enter Your email" className={`border border-gray-300 text-sm focus:outline-none  p-2 rounded ${errors.server === "Invalid email format" || errors.server === "All fields are required" || errors.server === "Email is required" ? "border border-red-500" : ""}`} />
-          {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
+          <input
+            name="email"
+            value={enteredEmail}
+            ref={emailInputRef}
+            onChange={(e) => setEnteredEmail(e.target.value)}
+            type="text"
+            placeholder="Enter Your email"
+            className={`border border-gray-300 text-sm focus:outline-none  p-2 rounded ${!formValidity.email ? "border border-red-500" : ""}`}
+          />
+          {!formValidity.email && <p className="text-red-500 text-sm">Please enter a valid email</p>}
         </div>
 
         <div className="flex flex-col gap-2 p-1">
           <label>Password</label>
-          <input name="password" value={formData.password} onChange={handleChange} type="password" placeholder="Enter Your Password" className={`border border-gray-300 text-sm focus:outline-none  p-2 rounded ${errors.server === "All fields are required" || errors.server == "Password is required" ? "border border-red-500" : ""}`} />
-          {errors.password && <p className="text-red-500 text-sm">{errors.password}</p>}
+          <input
+            name="password"
+            value={enteredPassword}
+            ref={passwordInputRef}
+            onChange={(e) => setEnteredPassword(e.target.value)}
+            type="password"
+            placeholder="Enter Your Password"
+            className={`border border-gray-300 text-sm focus:outline-none p-2 rounded ${!formValidity.password ? "border border-red-500" : ""}`}
+          />
+          {!formValidity.password && <p className="text-red-500 text-sm">Please enter a more than six chars</p>}
+
         </div>
 
         <div className="flex flex-col gap-2 p-1">
           <label>Role</label>
-          <select name="role" value={formData.role} onChange={handleChange} className={`border border-gray-300 text-sm focus:outline-none  p-2 rounded ${errors.server === "All fields are required" || errors.server == "Role is required" ? "border border-red-500" : ""}`} >
+          <select name="role"
+            value={enteredRole}
+            ref={roleInputRef}
+            onChange={(e) => setEnteredRole(e.target.value)}
+            className={`border border-gray-300 text-sm focus:outline-none p-2 rounded ${!formValidity.role ? "border border-red-500" : ""}`} >
             <option value="">Select Role</option>
             <option>Buyer</option>
             <option>Seller</option>
           </select>
-          {errors.role && <p className="text-red-500 text-sm">{errors.role}</p>}
+          {!formValidity.role && <p className="text-red-500 text-sm">Role is required</p>}
         </div>
 
         <button type="submit" className="bg-black text-white py-2 mt-4 cursor-pointer rounded hover:opacity-75">Submit</button>
@@ -95,6 +153,6 @@ export const SignupUser = () => {
           <Link to="/" className="ml-2 text-blue-500 underline">Login</Link>
         </div>
       </form>
-    </div>
+    </div >
   )
 }
