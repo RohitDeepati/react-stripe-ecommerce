@@ -7,7 +7,8 @@ import { ShoppingContext } from "../store/EcommerceContext"
 
 export const SuccessPage = () => {
   const [paymentStatus, setPaymentStatus] = useState(null)
-  const { email, items, setShoppingCart } = useContext(ShoppingContext)
+  const { email, setShoppingCart } = useContext(ShoppingContext)
+  const items = JSON.parse(localStorage.getItem(`cartitems${email}`)) || []
   const location = useLocation()
   const navigate = useNavigate();
   console.log("payment-status", paymentStatus)

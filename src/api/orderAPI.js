@@ -23,5 +23,4 @@ export const createOrder = (data) => ordersAPI.post("/orders", data);
 export const getOrdersByUserEmail = (email) =>
   ordersAPI.get(`/orders?email=${email}`);
 
-// export const getItemsByEmail = (email) =>
-//   ordersAPI.get(`/cartitems?email=${email}`);
+

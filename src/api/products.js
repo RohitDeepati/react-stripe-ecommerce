@@ -4,6 +4,7 @@ const getToken = () => localStorage.getItem("token");
 
 const productsAPI = axios.create({
   baseURL: "https://go-stripe-ecommerce-production.up.railway.app",
+  // baseURL:"http://localhost:9090/products/"
 });
 
 productsAPI.interceptors.request.use(
@@ -22,3 +23,7 @@ productsAPI.interceptors.request.use(
 export const getProducts = () => productsAPI.get("/products");
 
 export const addNewProduct = (data) => productsAPI.post("/newproducts", data);
+
+export const removeProduct = (id) => productsAPI.delete(`/products/${id}`)
+
+export const editProduct = (id, data) => productsAPI.patch(`/products/${id}`, data)

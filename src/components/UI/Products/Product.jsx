@@ -7,7 +7,6 @@ import { Navbar } from "../../utils/Navbar";
 export const Product = () => {
   const navigate = useNavigate();
   const { addItemToCart, products, items, fetchProducts } = useContext(ShoppingContext);
-  console.log("products", products)
 
   useEffect(() => {
     fetchProducts();
@@ -29,7 +28,6 @@ export const Product = () => {
       <div className="grid grid-cols-5 gap-4 p-4">
         {products.map((product) => (
           <div key={product.productId} className="relative border border-[whitesmoke] w-64 rounded-sm hover:shadow-lg cursor-pointer">
-            {/* Product Image with Blur Effect for Out of Stock */}
             <div className="relative">
               <img
                 className={`h-80 w-full object-cover ${product.stock <= 0 ? "blur-sm opacity-50" : ""}`}

@@ -8,7 +8,6 @@ import { ShoppingContextProvider } from "./components/store/EcommerceContext";
 import StripeContainer from "./components/payment/StripeContainer";
 import { SuccessPage } from "./components/pages/SuccessPage";
 import { OrderItems } from "./components/orderItems/OrderItems";
-import { AddNewProductForm } from "./components/UI/Products/AddNewProductForm";
 
 
 function App() {
@@ -24,7 +23,7 @@ function App() {
             <Route path="/checkout" element={<StripeContainer />} />
             <Route path="/success" element={<SuccessPage />} />
             <Route path="/orders" element={<OrderItems />} />
-            <Route path="/newproduct" element={<AddNewProductForm />} />
+            {/* <Route path="/newproduct" element={<AddNewProductForm />} /> */}
           </Routes>
         </Router>
       </ShoppingContextProvider>

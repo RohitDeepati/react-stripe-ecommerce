@@ -7,6 +7,9 @@ import { OrderCard } from "./OrderCard"
 export const OrderItems = () => {
   const { email } = useContext(ShoppingContext)
   const [orderItems, setOrderItems] = useState([])
+  const [loading, setLoading] = useState(true)
+
+
 
   const getOrders = async () => {
     try {
@@ -25,6 +28,8 @@ export const OrderItems = () => {
       setOrderItems(groupOrderItemsArray)
     } catch (error) {
       console.error(error)
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -35,6 +40,14 @@ export const OrderItems = () => {
       getOrders(email)
     }
   }, [email])
+
+  if (loading) {
+    return (
+      <div className="text-center text-black mt-8 text-gray-600 font-medium">
+        orders Loading...
+      </div>
+    )
+  }
   return (
     <>
       <nav className="flex justify-between sticky top-0 left-0 right-0 p-4 bg-white border-b border-gray-300">

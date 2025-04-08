@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const stripeApi = axios.create({
-  baseURL: "https://go-stripe-ecommerce-production.up.railway.app",
+  baseURL: "https://go-stripe-ecommerce-production.up.railway.app/payments",
 });
 
 export const paymentIntentApi = (data) =>

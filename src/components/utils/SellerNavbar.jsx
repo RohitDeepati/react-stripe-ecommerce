@@ -1,9 +1,10 @@
 import { useContext, useState } from "react"
-import { ShoppingContext } from "../store/EcommerceContext"
 import { Link, useNavigate } from "react-router"
-import { avatarIcon, deleteIcon, logoutIcon } from "../../assets/icons"
 import { Button, Modal, Popover } from "antd"
-import { AddNewProductForm } from "../UI/Products/AddNewProductForm"
+import { ShoppingContext } from "../store/EcommerceContext"
+import { AddNewProductForm } from "../UI/Seller-UI/ProductForms/AddNewProductForm"
+import { avatarIcon, deleteIcon, logoutIcon } from "../../assets/icons"
+
 
 export const SellerNavbar = ({ fetchProducts }) => {
   const { user, setEmail, setUser, deleteUser, email } = useContext(ShoppingContext)
@@ -68,9 +69,21 @@ export const SellerNavbar = ({ fetchProducts }) => {
       </Link>
 
       <div className="flex gap-4  items-center">
-        <Button type="primary" onClick={showAddNewProductModal} >Add New Product</Button>
-        <Modal title="Add New Product" open={isAddnewProductModalOpen} footer={false} onCancel={handleAddNewProductCancel} >
-          <AddNewProductForm onSuccess={fetchProducts} />
+        <Button type="primary"
+          onClick={showAddNewProductModal}
+        >
+          Add New Product
+        </Button>
+        <Modal
+          title="Add New Product"
+          open={isAddnewProductModalOpen}
+          footer={false}
+          onCancel={handleAddNewProductCancel}
+        >
+          <AddNewProductForm
+            onSuccess={fetchProducts}
+            setIsAddNewProductModalOpen={setIsAddNewProductModalOpen}
+          />
         </Modal>
         <Popover content={content}>
           <div className="flex flex-col items-center cursor-pointer">{avatarIcon} <span className="text-sm font-thin">{user?.name}</span></div>
