@@ -4,6 +4,8 @@ import { loginuser } from "../../api/users"
 import { ShoppingContext } from "../store/EcommerceContext"
 
 const isEmpty = (value) => value.trim() === ""
+const isMoreThanSix = (value) => value.trim().length >= 6
+
 export const LoginUser = () => {
   const navigate = useNavigate()
   const [error, setError] = useState("");
@@ -23,7 +25,7 @@ export const LoginUser = () => {
 
   const inputFormIsValid = () => {
     const enteredEmailIsValid = !isEmpty(enteredEmail)
-    const enteredPasswordIsValid = !isEmpty(enteredPassword)
+    const enteredPasswordIsValid = isMoreThanSix(enteredPassword)
 
     setFormValidity({
       email: enteredEmailIsValid,
@@ -32,6 +34,24 @@ export const LoginUser = () => {
     const formIsValid = enteredEmailIsValid && enteredPasswordIsValid
 
     return formIsValid
+  }
+
+  const handleEmailChange = (e) => {
+    const value = e.target.value
+    setEnteredEmail(value)
+    setFormValidity((prev) => ({
+      ...prev,
+      email: !isEmpty(value)
+    }))
+  }
+
+  const handlePasswordChange = (e) => {
+    const value = e.target.value
+    setEnteredPassword(value)
+    setFormValidity((prev) => ({
+      ...prev,
+      password: isMoreThanSix(value)
+    }))
   }
 
   const submitHandler = async (e) => {
@@ -70,7 +90,7 @@ export const LoginUser = () => {
           <input
             placeholder="Enter Your email"
             name="email" ref={emailInputRef}
-            value={enteredEmail} onChange={(e) => setEnteredEmail(e.target.value)}
+            value={enteredEmail} onChange={handleEmailChange}
             type="email" className={`border border-gray-300 text-sm focus:outline-none  p-2 rounded ${error === "invalid email or password" ? "border-red-500" : "border-gray-300"} ${!formValidity.email ? "border-red-500" : ""}`} />
           {!formValidity.email && <div className="text-red-500 text-sm">Please Enter a valid email address!</div>}
         </ div>
@@ -79,7 +99,7 @@ export const LoginUser = () => {
           <input placeholder="Enter Your Password"
             ref={passwordInputRef}
             name="password"
-            value={enteredPassword} onChange={(e) => setEnteredPassword(e.target.value)}
+            value={enteredPassword} onChange={handlePasswordChange}
             type="password" className={`border border-gray-300 text-sm focus:outline-none  p-2 rounded ${error === "invalid email or password" ? "border-red-500" : "border-gray-300"}  ${!formValidity.password ? "border-red-500" : ""}`} />
           {!formValidity.password && <div className="text-red-500 text-sm">Please Enter a valid password</div>}
         </div>
