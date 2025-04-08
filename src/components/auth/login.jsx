@@ -4,7 +4,6 @@ import { loginuser } from "../../api/users"
 import { ShoppingContext } from "../store/EcommerceContext"
 
 const isEmpty = (value) => value.trim() === ""
-const isMoreThanSix = (value) => value.trim().length >= 6
 const isValidEmail = (value) => /^\S+@\S+\.\S+$/.test(value.trim())
 
 export const LoginUser = () => {
@@ -26,7 +25,7 @@ export const LoginUser = () => {
 
   const inputFormIsValid = () => {
     const enteredEmailIsValid = !isEmpty(enteredEmail) && isValidEmail(enteredEmail)
-    const enteredPasswordIsValid = isMoreThanSix(enteredPassword)
+    const enteredPasswordIsValid = !isEmpty(value)
 
     setFormValidity({
       email: enteredEmailIsValid,
@@ -51,7 +50,7 @@ export const LoginUser = () => {
     setEnteredPassword(value)
     setFormValidity((prev) => ({
       ...prev,
-      password: isMoreThanSix(value)
+      password: !isEmpty(value)
     }))
   }
 
@@ -93,7 +92,7 @@ export const LoginUser = () => {
             name="email" ref={emailInputRef}
             value={enteredEmail} onChange={handleEmailChange}
             type="email" className={`border border-gray-300 text-sm focus:outline-none  p-2 rounded ${error === "invalid email or password" ? "border-red-500" : "border-gray-300"} ${!formValidity.email ? "border-red-500" : ""}`} />
-          {!formValidity.email && <div className="text-red-500 text-sm">Please Enter a valid email address!</div>}
+          {!formValidity.email && <div className="text-red-500 text-sm">This field is required</div>}
         </ div>
         <div className="flex flex-col justify-center gap-2 p-1">
           <label>Password</label>
@@ -102,7 +101,7 @@ export const LoginUser = () => {
             name="password"
             value={enteredPassword} onChange={handlePasswordChange}
             type="password" className={`border border-gray-300 text-sm focus:outline-none  p-2 rounded ${error === "invalid email or password" ? "border-red-500" : "border-gray-300"}  ${!formValidity.password ? "border-red-500" : ""}`} />
-          {!formValidity.password && <div className="text-red-500 text-sm">Please Enter a valid password</div>}
+          {!formValidity.password && <div className="text-red-500 text-sm">This field is required</div>}
         </div>
         <button type="submit" className="bg-black text-white py-2 mt-4 cursor-pointer rounded hover:opacity-75">Submit</button>
         <div className="flex justify-center gap-2 items-center font-thin text-sm mt-6">
