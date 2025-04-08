@@ -25,7 +25,7 @@ export const LoginUser = () => {
 
   const inputFormIsValid = () => {
     const enteredEmailIsValid = !isEmpty(enteredEmail) && isValidEmail(enteredEmail)
-    const enteredPasswordIsValid = !isEmpty(value)
+    const enteredPasswordIsValid = !isEmpty(enteredPassword)
 
     setFormValidity({
       email: enteredEmailIsValid,
