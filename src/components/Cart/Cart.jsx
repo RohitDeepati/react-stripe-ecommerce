@@ -7,7 +7,7 @@ import { CartItem } from "./cartItem.jsx"
 import { OrderSummary } from "./OrderSummary.jsx"
 
 export const Cart = () => {
-  const { items, updateItemQuantity, removeItem } = useContext(ShoppingContext)
+  const { items } = useContext(ShoppingContext)
   const [amount, setAmount] = useState(0)
 
   console.log("---items-in-cart---", items)
@@ -24,7 +24,6 @@ export const Cart = () => {
 
   const totalItems = items?.reduce((acc, item) => acc + item.quantity, 0)
 
-  // Stripe Payment Link
 
 
   return (

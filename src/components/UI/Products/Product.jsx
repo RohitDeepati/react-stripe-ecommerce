@@ -25,7 +25,7 @@ export const Product = () => {
   return (
     <div>
       <Navbar />
-      <div className="grid grid-cols-5 gap-4 p-4">
+      <div className="grid grid-cols-5 gap-4 p-4 pb-2">
         {products.map((product) => (
           <div key={product.productId} className="relative border border-[whitesmoke] w-64 rounded-sm hover:shadow-lg cursor-pointer">
             <div className="relative">
@@ -54,7 +54,7 @@ export const Product = () => {
             {/* Add to Cart Button */}
             <div className="flex justify-center mb-2">
               <button
-                className={`flex gap-2 cursor-pointer px-2 py-1 shadow-md justify-center items-center text-white ${product.stock <= 0
+                className={`flex gap-2 cursor-pointer px-2 py-1 shadow-md justify-center rounded-md items-center text-white ${product.stock <= 0
                   ? "bg-gray-400 cursor-not-allowed"
                   : isProductInCart(product.productId)
                     ? "bg-gray-700 hover:opacity-75"
