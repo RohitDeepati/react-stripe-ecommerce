@@ -4,6 +4,7 @@ import { ShoppingContext } from "../store/EcommerceContext"
 
 export const CartItem = () => {
   const { items, updateItemQuantity, removeItem } = useContext(ShoppingContext)
+  console.log("items", items)
   return (
     <div>
 

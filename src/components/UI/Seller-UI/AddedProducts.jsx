@@ -49,7 +49,7 @@ export const AddedProducts = () => {
               <ProductsTable
                 products={products}
                 fetchProducts={fetchProducts}
-                sestProducts={setProducts}
+                setProducts={setProducts}
               />
             </div>
           </div>
